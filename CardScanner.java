@@ -7,8 +7,8 @@ public class CardScanner implements CardScannerInterface
 	//Constructor
 	public CardScanner()
 	{
-		this.cardEjectStatus = true;
-		this.cardEjectStatus = true;
+		this.cardReadStatus = true;
+		this.cardInsertStatus = true;
 		this.cardEjectStatus = true;
 	}
 
@@ -27,6 +27,18 @@ public class CardScanner implements CardScannerInterface
 	public void CardEject() {
 		//TODO call check pin here. wherever it exists? should we even be calling checkpin?
 		
+	}
+	
+	public boolean getCardReadStatus() {
+		return cardReadStatus;
+	}
+	
+	public boolean getCardInsertStatus () {
+		return cardInsertStatus;
+	}
+	
+	public boolean getCardEjectStatus() {
+		return cardEjectStatus;
 	}
 	
 	//True = Normal/working
