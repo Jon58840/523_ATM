@@ -2,10 +2,10 @@
 //ATM
 
 
-public class CardScanner
+public class CashBank
 {
   //Constructor
-  public CardScanner()
+  public CashBank()
   {
     
   }
