@@ -5,8 +5,6 @@ package sm;
 
 public class Account
 {
-  //Constants
-  private static final int MAX_ACCOUNTS = 5;
   
   //Member Variables
   private int AccountNumber;

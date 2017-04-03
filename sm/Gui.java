@@ -10,6 +10,8 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import simulatedInput.FakeCards;
+
 public class Gui implements KeyListener {
 
 	public static final int FONT_SIZE = 24;
@@ -99,8 +101,8 @@ public class Gui implements KeyListener {
 			keypad.dataButtonPressed(9);
 			break;
 		case KeyEvent.VK_INSERT:
-			cardScanner.CardInsert(); // TODO is that the right method to call??
-			System.out.println("CARD INSERTED");
+			cardScanner.inputCard(FakeCards.getNextFakeCardNumber());
+			//System.out.println("CARD INSERTED");
 			break;
 		}
 	}

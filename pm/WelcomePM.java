@@ -18,15 +18,14 @@ public class WelcomePM {
 
 				// could be moved to while condition but this way it looks like
 				// in the specification
-				cardInserted = cs.getCardInsertStatus();
+				cardInserted = cs.isCardInsertEngine();
 
 			} else {
 
 				if (!m.isMonitorStatus()) {
-					// this is somehow ironic...
-					m.showMessages("Monitor fault.");
+					System.out.println("Monitor fault.");
 				} else if (!cs.getCardScannerStatus()) {
-					m.showMessages("Card scanner fault.");
+					System.out.println("Card scanner fault.");
 				}
 
 				SCB.setCurrentState(PN.SYSTEM_FAILURE);
@@ -43,6 +42,18 @@ public class WelcomePM {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+		
+		int accountNumber = cs.getCardInput();
+		
+		if(db.getAccountStatus(accountNumber)) {
+			// TODO wait for pin timer
+			// TODO valid card status ??
+			SCB.resetPinTrialTimes();
+			SCB.setCurrentState(PN.CHECK_PIN);
+		} else {
+			// TODO valid card status ??
+			SCB.setCurrentState(PN.EJECT_CARD);
 		}
 	}
 
