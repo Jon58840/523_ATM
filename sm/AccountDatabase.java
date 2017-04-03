@@ -9,6 +9,7 @@ import java.util.Map;
 public class AccountDatabase {
 	// Constants
 	private static final int MAX_ACCOUNTS = 5;
+	public static final int INVALID_ACCOUNT_NUMBER = -1;
 
 	// Member Variables
 	private Account[] accountsArray;

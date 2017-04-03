@@ -19,16 +19,34 @@ public class Monitor {
 	 */
 	private final Gui gui;
 
-	// Constructor
+	/**
+	 * Constructor of a Monitor SM instance.
+	 * 
+	 * @param gui
+	 *            The gui object of this monitor.
+	 */
 	public Monitor(Gui gui) {
 		this.monitorStatus = true;
 		this.gui = gui;
 	}
 
+	/**
+	 * Returns true if the monitor reports that it is working properly.
+	 * 
+	 * @return true if the monitor is okay, false if it is working faulty.
+	 */
 	public boolean isMonitorStatus() {
 		return monitorStatus;
 	}
 
+	/**
+	 * Set the monitor to working (true) or faulty (false).
+	 * 
+	 * Used for simulating the system.
+	 * 
+	 * @param monitorStatus
+	 *            The new monitor status
+	 */
 	public void setMonitorStatus(boolean monitorStatus) {
 		this.monitorStatus = monitorStatus;
 	}
@@ -39,7 +57,7 @@ public class Monitor {
 	 * 
 	 * @param msgs
 	 */
-	public void showMessages(String ... msgs) {
+	public void showMessages(String... msgs) {
 		this.gui.setMonitorMessage(msgs);
 	}
 }

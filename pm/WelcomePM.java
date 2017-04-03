@@ -7,8 +7,8 @@ import sm.CardScanner;
 import sm.Monitor;
 
 public class WelcomePM {
-
-	public static void welcome(CardScanner cs, Monitor m, AccountDatabase db) {
+	
+	public static int welcome(CardScanner cs, Monitor m, AccountDatabase db) {
 
 		boolean cardInserted = false;
 		while (!cardInserted) {
@@ -29,6 +29,7 @@ public class WelcomePM {
 				}
 
 				SCB.setCurrentState(PN.SYSTEM_FAILURE);
+				return AccountDatabase.INVALID_ACCOUNT_NUMBER;
 
 			}
 
@@ -48,13 +49,15 @@ public class WelcomePM {
 		
 		if(db.getAccountStatus(accountNumber)) {
 			// TODO wait for pin timer
-			// TODO valid card status ??
+			SCB.isValidCard = true;
 			SCB.resetPinTrialTimes();
 			SCB.setCurrentState(PN.CHECK_PIN);
 		} else {
-			// TODO valid card status ??
+			SCB.isValidCard = false;
 			SCB.setCurrentState(PN.EJECT_CARD);
 		}
+		
+		return accountNumber;
 	}
 
 }
