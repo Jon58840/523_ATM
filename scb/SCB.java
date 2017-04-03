@@ -43,6 +43,8 @@ public class SCB {
 
 	public static void main(String[] args) {
 		
+		initSCB();
+		
 		CardScanner cs = new CardScanner();
 		Keypad keypad = new Keypad();
 		

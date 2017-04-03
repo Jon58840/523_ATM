@@ -1,5 +1,6 @@
 package sm;
 //SENG 523
+
 //ATM
 
 public class Monitor {
@@ -32,7 +33,13 @@ public class Monitor {
 		this.monitorStatus = monitorStatus;
 	}
 
-	public void showMessage(String msg) {
-		this.gui.setMonitorMessage(msg);
+	/**
+	 * Shows the given message on the monitor. Every item in the given array
+	 * describes one line.
+	 * 
+	 * @param msgs
+	 */
+	public void showMessages(String ... msgs) {
+		this.gui.setMonitorMessage(msgs);
 	}
 }

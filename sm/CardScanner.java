@@ -42,6 +42,10 @@ public class CardScanner implements CardScannerInterface
 		return cardEjectStatus;
 	}
 	
+	public boolean getCardScannerStatus() {
+		return cardReadStatus && cardInsertStatus && cardEjectStatus;
+	}
+	
 	//True = Normal/working
 	//False = Faulty
 	private boolean cardReadStatus;

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -47,8 +48,15 @@ public class Gui implements KeyListener {
 		frame.setVisible(true);
 	}
 
-	public void setMonitorMessage(String msg) {
-		this.msgLabel.setText(msg);
+	public void setMonitorMessage(String ... msgs) {
+		StringBuilder sb = new StringBuilder("<html>");//"<html>Welcome!<br>Second line</html>"
+		for (String line : msgs) {
+			sb.append("<p align=\"center\">");
+			sb.append(line);
+			sb.append("</p>");
+		}
+		sb.append("</html>");
+		this.msgLabel.setText(sb.toString());
 	}
 
 	@Override
