@@ -1,3 +1,4 @@
+package sm;
 
 public interface CardScannerInterface {
 	public void CardInput(int cardNumber);
