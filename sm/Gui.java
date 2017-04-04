@@ -1,4 +1,5 @@
 package sm;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -20,11 +21,11 @@ public class Gui implements KeyListener {
 	private JLabel msgLabel;
 
 	private final CardScannerInterface cardScanner;
-	private final KeypadInterface keypad;
+	private final Keypad keypad;
 
-	public Gui(CardScannerInterface csi, KeypadInterface keypadInterface) {
+	public Gui(CardScannerInterface csi, Keypad keypadSimulationInterface) {
 		this.cardScanner = csi;
-		this.keypad = keypadInterface;
+		this.keypad = keypadSimulationInterface;
 		createAndShowGUI(); // can also be made public and called from
 							// outside...
 	}
@@ -50,8 +51,8 @@ public class Gui implements KeyListener {
 		frame.setVisible(true);
 	}
 
-	public void setMonitorMessage(String ... msgs) {
-		StringBuilder sb = new StringBuilder("<html>");//"<html>Welcome!<br>Second line</html>"
+	public void setMonitorMessage(String... msgs) {
+		StringBuilder sb = new StringBuilder("<html>");
 		for (String line : msgs) {
 			sb.append("<p align=\"center\">");
 			sb.append(line);
@@ -101,8 +102,15 @@ public class Gui implements KeyListener {
 			keypad.dataButtonPressed(9);
 			break;
 		case KeyEvent.VK_INSERT:
-			cardScanner.inputCard(FakeCards.getNextFakeCardNumber());
-			//System.out.println("CARD INSERTED");
+			int num = FakeCards.getNextFakeCardNumber();
+			cardScanner.inputCard(num);
+			System.out.println("CARD INSERTED (" + num + ")");
+			break;
+		case KeyEvent.VK_ENTER:
+			keypad.setEnterButtonPressed(true);
+			break;
+		case KeyEvent.VK_ESCAPE:
+			keypad.setCancelButtonPressed(true);
 			break;
 		}
 	}

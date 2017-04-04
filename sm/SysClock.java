@@ -4,7 +4,9 @@ public class SysClock extends Thread implements SysTimer {
 
 	public final static int CLOCK_FREQ_MS = 100;
 
-	int timerVal = 0; // in ms
+	private int timerVal = 0; // in ms
+	
+	private boolean timerOn = false;
 
 	private boolean running = true;
 
@@ -22,10 +24,19 @@ public class SysClock extends Thread implements SysTimer {
 
 	synchronized public void setTimer(int seconds) {
 		timerVal = seconds * 1000;
+		timerOn = true;
 	}
 	
 	synchronized public boolean timerRunDown() {
 		return timerVal == 0;
+	}
+	
+	synchronized public void deactivateTimer() {
+		this.timerOn = false;
+	}
+	
+	synchronized public boolean isTimerOn() {
+		return timerOn;
 	}
 
 }

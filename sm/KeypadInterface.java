@@ -11,4 +11,25 @@ public interface KeypadInterface {
 	 */
 	void dataButtonPressed(int dataValue);
 
+	/**
+	 * Returns true if the enter button was pressed
+	 * 
+	 * @return true, if enter button was pressed. False, otherwise.
+	 */
+	public boolean isEnterButtonPressed();
+	
+	/**
+	 * Returns true if the cancel button was pressed
+	 * 
+	 * @return true, if cancel button was pressed. False, otherwise.
+	 */
+	public boolean isCancelButtonPressed();
+
+	/**
+	 * Returns true if the keypad reports that it is working properly.
+	 * 
+	 * @return true if the keypad is okay, false if it is faulty.
+	 */
+	public boolean isKeypadStatus();
+
 }
