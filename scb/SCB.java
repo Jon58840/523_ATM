@@ -75,8 +75,8 @@ public class SCB {
 
 		AccountDatabase db = new AccountDatabase();
 
-		CashBank cashBank = new CashBank();
-		CashDisburser cashDisbursur = new CashDisburser();
+		CashDisburser cashDisburser = new CashDisburser();
+		CashBank cashBank = new CashBank(cashDisburser);
 
 		Gui gui = new Gui(cardScanner, keypad);
 		Monitor monitor = new Monitor(gui);
@@ -108,7 +108,7 @@ public class SCB {
 				break;
 			case DISBURSE_BILLS:
 				DisburseBillsPM.disburseBills(currentAccountNumber, cardScanner, monitor, keypad, cashBank,
-						cashDisbursur, db, systemClock);
+						cashDisburser, db, systemClock);
 				break;
 			case EJECT_CARD:
 				EjectCardPM.ejectCard(cardScanner, monitor);

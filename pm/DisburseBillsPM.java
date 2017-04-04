@@ -2,6 +2,7 @@ package pm;
 
 import scb.PN;
 import scb.SCB;
+import sm.Account;
 import sm.AccountDatabase;
 import sm.CardScanner;
 import sm.CashBank;
@@ -27,10 +28,17 @@ public class DisburseBillsPM {
 
 		if (disburser.isWorking()) {
 			monitor.showMessages("Please collect money, thank you.");
-			int amountToWithdraw = db.getAccount(accountNumber).getCurrentWithdraw();
-			
-			// TODO implement remaining pm
-			
+			final int amountToWithdraw = db.getAccount(accountNumber).getCurrentWithdraw();
+
+			cashBank.decreaseCashByAmount(amountToWithdraw);
+			final Account acc = db.getAccount(accountNumber);
+			acc.setBalance(acc.getBalance() - amountToWithdraw);
+
+			disburser.disburse();
+			SCB.isBillsDisbursed = true;
+			SCB.serviceCompleted = true;
+			SCB.setCurrentState(PN.EJECT_CARD);
+
 		} else {
 			SCB.isBillsDisbursed = false;
 			System.out.println("Bills disburser fault");
