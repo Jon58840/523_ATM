@@ -2,7 +2,7 @@ package simulatedInput;
 
 public class FakeCards {
 
-	private final static int[] cardNumbers = new int[] { 0, 12412, 21312 };
+	private final static int[] cardNumbers = new int[] { 0, 1234, 21312 };
 
 	private static int idx = 0;
 

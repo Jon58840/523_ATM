@@ -5,10 +5,11 @@ import scb.SCB;
 import sm.AccountDatabase;
 import sm.CardScanner;
 import sm.Monitor;
+import sm.SysTimer;
 
 public class WelcomePM {
-	
-	public static int welcome(CardScanner cs, Monitor m, AccountDatabase db) {
+
+	public static int welcome(CardScanner cs, Monitor m, AccountDatabase db, SysTimer systemClock) {
 
 		boolean cardInserted = false;
 		while (!cardInserted) {
@@ -44,11 +45,11 @@ public class WelcomePM {
 				e.printStackTrace();
 			}
 		}
-		
+
 		int accountNumber = cs.getCardInput();
-		
-		if(db.getAccountStatus(accountNumber)) {
-			// TODO wait for pin timer
+
+		if (db.getAccountStatus(accountNumber)) {
+			systemClock.setTimer(10);
 			SCB.isValidCard = true;
 			SCB.resetPinTrialTimes();
 			SCB.setCurrentState(PN.CHECK_PIN);
@@ -56,7 +57,7 @@ public class WelcomePM {
 			SCB.isValidCard = false;
 			SCB.setCurrentState(PN.EJECT_CARD);
 		}
-		
+
 		return accountNumber;
 	}
 

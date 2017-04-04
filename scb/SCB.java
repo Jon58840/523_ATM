@@ -15,6 +15,7 @@ import sm.CashDisburser;
 import sm.Gui;
 import sm.Keypad;
 import sm.Monitor;
+import sm.SysClock;
 
 //SENG 523
 //ATM
@@ -79,29 +80,34 @@ public class SCB {
 		Gui gui = new Gui(cardScanner, keypad);
 		Monitor monitor = new Monitor(gui);
 
+		SysClock systemClock = new SysClock();
+		systemClock.start();
+
 		int currentAccountNumber = AccountDatabase.INVALID_ACCOUNT_NUMBER;
 
 		while (!sysShutDown) {
 			// systemDispatch TODO maybe move to separate function
 			switch (SCB.currentState) {
 			case WELCOME:
-				currentAccountNumber = WelcomePM.welcome(cardScanner, monitor, db);
+				currentAccountNumber = WelcomePM.welcome(cardScanner, monitor, db, systemClock);
 				break;
 			case CHECK_PIN:
-				CheckPinPM.checkPIN(currentAccountNumber, monitor, keypad, db);
+				CheckPinPM.checkPIN(currentAccountNumber, monitor, keypad, db, systemClock);
 				break;
 			case INPUT_WITHDRAW_AMOUNT:
-				InputWithdrawAmountPM.inputWithdrawAmount(currentAccountNumber, cardScanner, monitor, keypad, db);
+				InputWithdrawAmountPM.inputWithdrawAmount(currentAccountNumber, cardScanner, monitor, keypad, db,
+						systemClock);
 				break;
 			case VERIFY_BALANCE:
-				VerifyBalancePM.verifyBalance(currentAccountNumber, monitor, keypad, db);
+				VerifyBalancePM.verifyBalance(currentAccountNumber, monitor, keypad, db, systemClock);
 				break;
 			case VERIFY_BILLS_AVAILABILTY:
-				VerifyBillsAvailabiltyPM.verifyBillsAvailability(cardScanner, monitor, keypad, cashBank, db);
+				VerifyBillsAvailabiltyPM.verifyBillsAvailability(cardScanner, monitor, keypad, cashBank, db,
+						systemClock);
 				break;
 			case DISBURSE_BILLS:
 				DisburseBillsPM.disburseBills(currentAccountNumber, cardScanner, monitor, keypad, cashBank,
-						cashDisbursur, db);
+						cashDisbursur, db, systemClock);
 				break;
 			case EJECT_CARD:
 				EjectCardPM.ejectCard(cardScanner, monitor);

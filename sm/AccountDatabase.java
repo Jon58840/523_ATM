@@ -19,10 +19,21 @@ public class AccountDatabase {
 	public AccountDatabase() {
 		this.accountMapping = new HashMap<>();
 		this.accountsArray = new Account[MAX_ACCOUNTS];
+		populateDatabase();
 	}
 
 	private void populateDatabase() {
-		// TODO
+		int accNo = 1234;
+		int idx = 0;
+		accountsArray[idx] = new Account(accNo, true, 4321, "John Doe", 100, 40, 0);
+		accountMapping.put(accNo, idx);
+		
+		accNo = 10;
+		idx = 1;
+		accountsArray[idx] = new Account(accNo, true, 2222, "asdi awu", 1000, 80, 0);
+		accountMapping.put(accNo, idx);
+		
+		// TODO more
 	}
 
 	public boolean getAccountStatus(int accountNumber) {
