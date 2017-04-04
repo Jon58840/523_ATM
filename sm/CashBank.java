@@ -25,4 +25,8 @@ public class CashBank {
 		this.cashAmount -= amount;
 		cashDisburser.putMoney(cashAmount);
 	}
+	
+	public int availableAmountOfCash() {
+		return cashAmount;
+	}
 }

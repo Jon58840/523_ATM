@@ -33,8 +33,9 @@ public class SCB {
 	public static boolean isValidPin;
 	public static boolean isValidAmount;
 	public static boolean isValidBalance;
-	public static boolean sysShutDown;
+	public static boolean isBillsAvailable;
 	public static boolean isBillsDisbursed;
+	public static boolean sysShutDown;
 
 	// Constructor
 	public static void initSCB() {
@@ -44,6 +45,8 @@ public class SCB {
 		timeOut = false;
 		isValidCard = true;
 		isValidPin = false;
+		isBillsAvailable = false;
+		isBillsDisbursed = false;
 		sysShutDown = false;
 		resetPinTrialTimes();
 	}
@@ -105,7 +108,7 @@ public class SCB {
 				VerifyBalancePM.verifyBalance(currentAccountNumber, monitor, keypad, db, systemClock);
 				break;
 			case VERIFY_BILLS_AVAILABILTY:
-				VerifyBillsAvailabiltyPM.verifyBillsAvailability(cardScanner, monitor, keypad, cashBank, db,
+				VerifyBillsAvailabiltyPM.verifyBillsAvailability(currentAccountNumber, monitor, keypad, cashBank, db,
 						systemClock);
 				break;
 			case DISBURSE_BILLS:
