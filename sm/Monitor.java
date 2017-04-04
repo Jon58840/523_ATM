@@ -35,7 +35,7 @@ public class Monitor {
 	 * 
 	 * @return true if the monitor is okay, false if it is working faulty.
 	 */
-	public boolean isMonitorStatus() {
+	public boolean isWorking() {
 		return monitorStatus;
 	}
 

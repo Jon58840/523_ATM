@@ -32,6 +32,7 @@ public class SCB {
 	public static boolean isValidCard;
 	public static boolean isValidPin;
 	public static boolean sysShutDown;
+	public static boolean isBillsDisbursed;
 
 	// Constructor
 	public static void initSCB() {

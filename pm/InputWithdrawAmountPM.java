@@ -8,7 +8,7 @@ import sm.SysTimer;
 
 public class InputWithdrawAmountPM {
 
-	public static void inputWithdrawAmount(int currentAccountNumber, CardScanner cs, Monitor m, KeypadInterface keypad,
+	public static void inputWithdrawAmount(int currentAccountNumber, CardScanner cs, Monitor monitor, KeypadInterface keypad,
 			AccountDatabase db, SysTimer sysClock) {
 
 		// TODO implement PM

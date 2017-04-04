@@ -1,5 +1,7 @@
 package pm;
 
+import scb.PN;
+import scb.SCB;
 import sm.AccountDatabase;
 import sm.CardScanner;
 import sm.CashBank;
@@ -10,10 +12,30 @@ import sm.SysTimer;
 
 public class DisburseBillsPM {
 
-	public static void disburseBills(int accountNumber, CardScanner cd, Monitor m, KeypadInterface keypad, CashBank cb, CashDisburser disburser,
-			AccountDatabase db, SysTimer sysClock) {
+	public static void disburseBills(int accountNumber, CardScanner cd, Monitor monitor, KeypadInterface keypad,
+			CashBank cashBank, CashDisburser disburser, AccountDatabase db, SysTimer sysClock) {
 
-		// TODO implement pm
+		if (!monitor.isWorking()) {
+			System.out.println("Monitor fault.");
+			SCB.setCurrentState(PN.SYSTEM_FAILURE);
+			return;
+		} else if (!cashBank.isWorking()) {
+			System.out.println("Bills storage fault.");
+			SCB.setCurrentState(PN.SYSTEM_FAILURE);
+			return;
+		}
+
+		if (disburser.isWorking()) {
+			monitor.showMessages("Please collect money, thank you.");
+			int amountToWithdraw = db.getAccount(accountNumber).getCurrentWithdraw();
+			
+			// TODO implement remaining pm
+			
+		} else {
+			SCB.isBillsDisbursed = false;
+			System.out.println("Bills disburser fault");
+			SCB.setCurrentState(PN.SYSTEM_FAILURE);
+		}
 	}
 
 }

@@ -1,13 +1,18 @@
 package sm;
 //SENG 523
+
 //ATM
 
+public class CashDisburser {
 
-public class CashDisburser
-{
-  //Constructor
-  public CashDisburser()
-  {
-    
-  }
+	private boolean cashDisburserStatus;
+
+	// Constructor
+	public CashDisburser() {
+		cashDisburserStatus = true;
+	}
+
+	public boolean isWorking() {
+		return cashDisburserStatus;
+	}
 }

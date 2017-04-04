@@ -6,12 +6,12 @@ import sm.Monitor;
 
 public class SysFailurePM {
 
-	public static void sysFailure(CardScanner cs, Monitor m) {
+	public static void sysFailure(CardScanner cs, Monitor monitor) {
 		System.out.println("System failure");
 
 		// its somehow ironic that this will also be executed in case of a
 		// monitor failure...
-		m.showMessages("System failure. Please use another machine.");
+		monitor.showMessages("System failure. Please use another machine.");
 		
 		cs.ejectCard();
 		

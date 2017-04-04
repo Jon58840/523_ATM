@@ -9,7 +9,7 @@ import sm.SysTimer;
 
 public class VerifyBillsAvailabiltyPM {
 
-	public static void verifyBillsAvailability(CardScanner cs, Monitor m, KeypadInterface keypad, CashBank cb,
+	public static void verifyBillsAvailability(CardScanner cs, Monitor monitor, KeypadInterface keypad, CashBank cb,
 			AccountDatabase db, SysTimer sysClock) {
 		
 		// TODO implement pm

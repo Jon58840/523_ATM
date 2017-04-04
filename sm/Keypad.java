@@ -98,7 +98,7 @@ public class Keypad implements KeypadInterface {
 	 * @return true if the keypad is okay, false if it is faulty.
 	 */
 	@Override
-	public boolean isKeypadStatus() {
+	public boolean isWorking() {
 		return keypadStatus;
 	}
 

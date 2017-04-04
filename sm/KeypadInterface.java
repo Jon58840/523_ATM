@@ -43,6 +43,6 @@ public interface KeypadInterface {
 	 * 
 	 * @return true if the keypad is okay, false if it is faulty.
 	 */
-	public boolean isKeypadStatus();
+	public boolean isWorking();
 
 }

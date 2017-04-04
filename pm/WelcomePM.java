@@ -9,13 +9,13 @@ import sm.SysTimer;
 
 public class WelcomePM {
 
-	public static int welcome(CardScanner cs, Monitor m, AccountDatabase db, SysTimer systemClock) {
+	public static int welcome(CardScanner cs, Monitor monitor, AccountDatabase db, SysTimer systemClock) {
 
 		boolean cardInserted = false;
 		while (!cardInserted) {
-			if (m.isMonitorStatus() && cs.getCardScannerStatus()) {
+			if (monitor.isWorking() && cs.getCardScannerStatus()) {
 
-				m.showMessages("Welcome!", "Please insert your card.");
+				monitor.showMessages("Welcome!", "Please insert your card.");
 
 				// could be moved to while condition but this way it looks like
 				// in the specification
@@ -23,7 +23,7 @@ public class WelcomePM {
 
 			} else {
 
-				if (!m.isMonitorStatus()) {
+				if (!monitor.isWorking()) {
 					System.out.println("Monitor fault.");
 				} else if (!cs.getCardScannerStatus()) {
 					System.out.println("Card scanner fault.");
