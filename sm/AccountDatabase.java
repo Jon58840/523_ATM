@@ -33,7 +33,17 @@ public class AccountDatabase {
 		accountsArray[idx] = new Account(accNo, true, 2222, "asdi awu", 1000, 80, 0);
 		accountMapping.put(accNo, idx);
 		
-		// TODO more
+		accNo = 465;
+		idx = 2;
+		accountsArray[idx] = new Account(accNo, true, 1234, "mr. empty account", 0, 400, 0);
+		accountMapping.put(accNo, idx);
+		
+		accNo = 21312;
+		idx = 3;
+		accountsArray[idx] = new Account(accNo, true, 0010, "Jane Roe", 2000, 5000, 0);
+		accountMapping.put(accNo, idx);
+
+		// TODO more ?
 	}
 
 	public boolean getAccountStatus(int accountNumber) {
