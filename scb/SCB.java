@@ -65,10 +65,6 @@ public class SCB {
 		return pinTrialTimes;
 	}
 
-	public static PN getCurrentState() {
-		return currentState;
-	}
-
 	public static void setCurrentState(PN currentState) {
 		SCB.currentState = currentState;
 	}
@@ -94,7 +90,7 @@ public class SCB {
 		int currentAccountNumber = AccountDatabase.INVALID_ACCOUNT_NUMBER;
 
 		while (!sysShutDown) {
-			// systemDispatch TODO maybe move to separate function
+			// systemDispatch
 			switch (SCB.currentState) {
 			case WELCOME:
 				currentAccountNumber = WelcomePM.welcome(cardScanner, monitor, db, systemClock);

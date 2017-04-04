@@ -64,10 +64,11 @@ public class CheckPinPM {
 					SCB.isValidPin = false;
 					SCB.setCurrentState(PN.EJECT_CARD);
 				}
+			} else {
+				// TODO not mentioned in specification
 			}
 		}
 
-		// TODO implement remaining PM
 	}
 
 }
