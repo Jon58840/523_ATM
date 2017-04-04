@@ -45,6 +45,14 @@ public class EjectCardPM {
 			SCB.setCurrentState(PN.SYSTEM_FAILURE);
 		}
 
+		// 2s delay Added (not in specification) to see the results and to
+		// simulate time needed to eject card
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

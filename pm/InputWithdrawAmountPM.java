@@ -22,6 +22,7 @@ public class InputWithdrawAmountPM {
 			} else {
 				if (sysClock.timerRunDown() && sysClock.isTimerOn()) {
 					System.out.println("Operation time out.");
+					SCB.timeOut = true;
 					SCB.setCurrentState(PN.EJECT_CARD);
 					return;
 				} else if (!monitor.isWorking()) {

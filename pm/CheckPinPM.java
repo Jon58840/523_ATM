@@ -20,6 +20,7 @@ public class CheckPinPM {
 			} else {
 				if (sysClock.timerRunDown() && sysClock.isTimerOn()) {
 					System.out.println("Operation time out.");
+					SCB.timeOut = true; // added (not in specification) 
 					SCB.setCurrentState(PN.EJECT_CARD);
 					return;
 				} else if (!monitor.isWorking()) {
