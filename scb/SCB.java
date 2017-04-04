@@ -31,6 +31,7 @@ public class SCB {
 	public static boolean timeOut;
 	public static boolean isValidCard;
 	public static boolean isValidPin;
+	public static boolean isValidAmount;
 	public static boolean sysShutDown;
 	public static boolean isBillsDisbursed;
 
@@ -96,7 +97,7 @@ public class SCB {
 				CheckPinPM.checkPIN(currentAccountNumber, monitor, keypad, db, systemClock);
 				break;
 			case INPUT_WITHDRAW_AMOUNT:
-				InputWithdrawAmountPM.inputWithdrawAmount(currentAccountNumber, cardScanner, monitor, keypad, db,
+				InputWithdrawAmountPM.inputWithdrawAmount(currentAccountNumber, monitor, keypad, db,
 						systemClock);
 				break;
 			case VERIFY_BALANCE:

@@ -37,7 +37,7 @@ public class CheckPinPM {
 		final int pin = keypad.getDataInput(true);
 		if (pin == db.getAccount(currentAccountNumber).getPIN()) {
 			SCB.isValidPin = true;
-			sysClock.setTimer(10);
+			sysClock.setTimer(10); // set timer for input withdraw amount
 			SCB.setCurrentState(PN.INPUT_WITHDRAW_AMOUNT);
 		} else {
 			SCB.isValidPin = false;
