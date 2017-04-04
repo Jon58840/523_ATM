@@ -42,4 +42,11 @@ public class AccountDatabase {
 		}
 		return false;
 	}
+	
+	public Account getAccount(int accountNumber) {
+		if (accountMapping.containsKey(accountNumber)) {
+			return accountsArray[accountMapping.get(accountNumber)];
+		}
+		throw new IllegalArgumentException(accountNumber +" does not belong to any account");
+	}
 }

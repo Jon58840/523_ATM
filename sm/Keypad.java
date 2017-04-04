@@ -17,9 +17,9 @@ public class Keypad implements KeypadInterface {
 	 * The data that was entered by the user.
 	 */
 	private int dataInput;
-	
+
 	private boolean enterPressed;
-	
+
 	private boolean cancelPressed;
 
 	/**
@@ -52,23 +52,44 @@ public class Keypad implements KeypadInterface {
 		}
 
 	}
-	
+
 	public void setEnterButtonPressed(boolean enterPressed) {
 		this.enterPressed = enterPressed;
 	}
-	
+
 	@Override
 	public boolean isEnterButtonPressed() {
-		return enterPressed;
+		boolean res = enterPressed;
+		enterPressed = false;
+		return res;
 	}
-	
+
 	public void setCancelButtonPressed(boolean cancelPressed) {
 		this.cancelPressed = cancelPressed;
 	}
-	
+
 	@Override
 	public boolean isCancelButtonPressed() {
-		return cancelPressed;
+		boolean res = cancelPressed;
+		cancelPressed = false;
+		return res;
+	}
+
+	/**
+	 * Returns the latest data input. If reset is set to true, data input will
+	 * be reset afterwards so new data can be read without problems.
+	 * 
+	 * @param reset
+	 *            true if the returned data input of the keypad should be reset.
+	 * 
+	 * @return the latest data input.
+	 */
+	public int getDataInput(boolean reset) {
+		int res = dataInput;
+		if (reset) {
+			dataInput = 0;
+		}
+		return res;
 	}
 
 	/**

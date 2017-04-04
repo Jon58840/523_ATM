@@ -12,18 +12,31 @@ public interface KeypadInterface {
 	void dataButtonPressed(int dataValue);
 
 	/**
-	 * Returns true if the enter button was pressed
+	 * Returns true if the enter button was pressed between the last call of this function and now.
+	 * This means that this method will reset the value.
 	 * 
 	 * @return true, if enter button was pressed. False, otherwise.
 	 */
 	public boolean isEnterButtonPressed();
 	
 	/**
-	 * Returns true if the cancel button was pressed
+	 * Returns true if the cancel button was pressed between the last call of this function and now.
+	 * This means that this method will reset the value.
 	 * 
 	 * @return true, if cancel button was pressed. False, otherwise.
 	 */
 	public boolean isCancelButtonPressed();
+	
+	/**
+	 * Returns the latest data input. If reset is set to true, data input will
+	 * be reset afterwards so new data can be read without problems.
+	 * 
+	 * @param reset
+	 *            true if the returned data input of the keypad should be reset.
+	 * 
+	 * @return the latest data input.
+	 */
+	public int getDataInput(boolean reset);
 
 	/**
 	 * Returns true if the keypad reports that it is working properly.

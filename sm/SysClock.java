@@ -38,5 +38,9 @@ public class SysClock extends Thread implements SysTimer {
 	synchronized public boolean isTimerOn() {
 		return timerOn;
 	}
+	
+	synchronized public void terminateClock() {
+		this.running = false;
+	}
 
 }
