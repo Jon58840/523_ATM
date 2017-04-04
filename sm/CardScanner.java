@@ -47,7 +47,7 @@ public class CardScanner implements CardScannerInterface
 		
 	}
 	
-	public void CardEject() {
+	public void ejectCard() {
 		//TODO call check pin here. wherever it exists? should we even be calling checkpin?
 		
 	}

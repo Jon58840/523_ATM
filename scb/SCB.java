@@ -1,11 +1,17 @@
 package scb;
 
 import pm.CheckPinPM;
+import pm.DisburseBillsPM;
 import pm.EjectCardPM;
 import pm.InputWithdrawAmountPM;
+import pm.SysFailurePM;
+import pm.VerifyBalancePM;
+import pm.VerifyBillsAvailabiltyPM;
 import pm.WelcomePM;
 import sm.AccountDatabase;
 import sm.CardScanner;
+import sm.CashBank;
+import sm.CashDisburser;
 import sm.Gui;
 import sm.Keypad;
 import sm.Monitor;
@@ -21,10 +27,13 @@ public class SCB {
 
 	// scb status
 	public static boolean isValidCard;
+	public static boolean sysShutDown;
 
 	// Constructor
 	public static void initSCB() {
 		currentState = PN.WELCOME;
+		isValidCard = true;
+		sysShutDown = false;
 		resetPinTrialTimes();
 	}
 
@@ -52,41 +61,46 @@ public class SCB {
 
 		initSCB();
 
-		CardScanner cs = new CardScanner();
+		CardScanner cardScanner = new CardScanner();
 		Keypad keypad = new Keypad();
 
 		AccountDatabase db = new AccountDatabase();
 
-		Gui gui = new Gui(cs, keypad);
-		Monitor m = new Monitor(gui);
+		CashBank cashBank = new CashBank();
+		CashDisburser cashDisbursur = new CashDisburser();
+
+		Gui gui = new Gui(cardScanner, keypad);
+		Monitor monitor = new Monitor(gui);
 
 		int currentAccountNumber = AccountDatabase.INVALID_ACCOUNT_NUMBER;
-		int amountToWithdraw = 0;
 
-		boolean running = true;
-		while (running) {
+		while (!sysShutDown) {
 			// systemDispatch TODO maybe move to separate function
 			switch (SCB.currentState) {
 			case WELCOME:
-				currentAccountNumber = WelcomePM.welcome(cs, m, db);
+				currentAccountNumber = WelcomePM.welcome(cardScanner, monitor, db);
 				break;
 			case CHECK_PIN:
-				CheckPinPM.checkPIN(currentAccountNumber, m, keypad, db);
+				CheckPinPM.checkPIN(currentAccountNumber, monitor, keypad, db);
 				break;
 			case INPUT_WITHDRAW_AMOUNT:
-				InputWithdrawAmountPM.inputWithdrawAmount(currentAccountNumber, cs, m, keypad, db);
+				InputWithdrawAmountPM.inputWithdrawAmount(currentAccountNumber, cardScanner, monitor, keypad, db);
 				break;
 			case VERIFY_BALANCE:
-				amountToWithdraw = VerifyBalancePM.verifyBalance(currentAccountNumber, m, keypad, db);
+				VerifyBalancePM.verifyBalance(currentAccountNumber, monitor, keypad, db);
 				break;
 			case VERIFY_BILLS_AVAILABILTY:
+				VerifyBillsAvailabiltyPM.verifyBillsAvailability(cardScanner, monitor, keypad, cashBank, db);
 				break;
 			case DISBURSE_BILLS:
+				DisburseBillsPM.disburseBills(currentAccountNumber, cardScanner, monitor, keypad, cashBank,
+						cashDisbursur, db);
 				break;
 			case EJECT_CARD:
-				EjectCardPM.ejectCard(cs, m);
+				EjectCardPM.ejectCard(cardScanner, monitor);
 				break;
 			case SYSTEM_FAILURE:
+				SysFailurePM.sysFailure(cardScanner, monitor);
 				break;
 			default:
 				throw new IllegalStateException("current state " + currentState + "invalid");
