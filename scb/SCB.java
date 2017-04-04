@@ -22,17 +22,24 @@ import sm.Monitor;
 public class SCB {
 
 	private static PN currentState;
-	private static PN lastState; // TODO necessary??
 	private static int pinTrialTimes;
 
 	// scb status
+	public static boolean serviceCompleted;
+	public static boolean serviceCanceled;
+	public static boolean timeOut;
 	public static boolean isValidCard;
+	public static boolean isValidPin;
 	public static boolean sysShutDown;
 
 	// Constructor
 	public static void initSCB() {
 		currentState = PN.WELCOME;
+		serviceCompleted = false;
+		serviceCanceled = false;
+		timeOut = false;
 		isValidCard = true;
+		isValidPin = false;
 		sysShutDown = false;
 		resetPinTrialTimes();
 	}
