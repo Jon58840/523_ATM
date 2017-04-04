@@ -12,9 +12,10 @@ public class CashBank {
 	private final CashDisburser cashDisburser;
 
 	// Constructor
-	public CashBank(CashDisburser cashDisburser) {
-		this.cashDisburser = cashDisburser;
+	public CashBank(int startCashAmount, CashDisburser cashDisburser) {
 		cashBankStatus = true;
+		this.cashAmount = startCashAmount;
+		this.cashDisburser = cashDisburser;
 	}
 
 	public boolean isWorking() {
@@ -23,7 +24,7 @@ public class CashBank {
 	
 	public void decreaseCashByAmount(int amount) {
 		this.cashAmount -= amount;
-		cashDisburser.putMoney(cashAmount);
+		cashDisburser.putMoney(amount);
 	}
 	
 	public int availableAmountOfCash() {

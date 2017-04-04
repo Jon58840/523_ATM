@@ -21,6 +21,8 @@ import sm.SysClock;
 //ATM
 
 public class SCB {
+	
+	public static final int START_AMOUNT_OF_CASH_IN_ATM = 10000; // dollar
 
 	private static PN currentState;
 	private static int pinTrialTimes;
@@ -81,7 +83,7 @@ public class SCB {
 		AccountDatabase db = new AccountDatabase();
 
 		CashDisburser cashDisburser = new CashDisburser();
-		CashBank cashBank = new CashBank(cashDisburser);
+		CashBank cashBank = new CashBank(START_AMOUNT_OF_CASH_IN_ATM, cashDisburser);
 
 		Gui gui = new Gui(cardScanner, keypad);
 		Monitor monitor = new Monitor(gui);
