@@ -25,13 +25,14 @@ public class SCB {
 	private static PN currentState;
 	private static int pinTrialTimes;
 
-	// scb status
+	// scb status (TODO remove unused status)
 	public static boolean serviceCompleted;
 	public static boolean serviceCanceled;
 	public static boolean timeOut;
 	public static boolean isValidCard;
 	public static boolean isValidPin;
 	public static boolean isValidAmount;
+	public static boolean isValidBalance;
 	public static boolean sysShutDown;
 	public static boolean isBillsDisbursed;
 
