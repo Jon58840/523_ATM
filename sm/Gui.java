@@ -29,9 +29,8 @@ public class Gui implements KeyListener {
 
 	private final CardScannerInterface cardScanner;
 	private final Keypad keypad;
-	
+	private final CashDisburser disburser;
 	private Monitor monitor;
-	private CashDisburser disburser;
 
 	public Gui(CardScannerInterface csi, Keypad keypadSimulationInterface, CashDisburser disburser) {
 		this.cardScanner = csi;
@@ -43,6 +42,9 @@ public class Gui implements KeyListener {
 		frame.requestFocus();
 	}
 
+	/**
+	 * Creates GUI of the ATM.
+	 */
 	private void createAndShowGUI() {
 
 		// Create and set up the window.
@@ -64,6 +66,9 @@ public class Gui implements KeyListener {
 		frame.setVisible(true);
 	}
 
+	/**
+	 * Creates the GUI used to simulate the devices
+	 */
 	private void createDeviceSimulatorGUI() {
 
 		JFrame deviceControl = new JFrame("Devices");
@@ -78,9 +83,9 @@ public class Gui implements KeyListener {
 		ButtonGroup group = new ButtonGroup();
 		JRadioButton keypadOkBtn = new JRadioButton("working");
 		keypadOkBtn.setSelected(true);
-		keypadOkBtn.addActionListener(e-> keypad.setKeypadStatus(true));
+		keypadOkBtn.addActionListener(e -> keypad.setKeypadStatus(true));
 		JRadioButton keypadFaultyBtn = new JRadioButton("faulty");
-		keypadFaultyBtn.addActionListener(e-> keypad.setKeypadStatus(false));
+		keypadFaultyBtn.addActionListener(e -> keypad.setKeypadStatus(false));
 		group.add(keypadOkBtn);
 		pane.add(keypadOkBtn);
 		group.add(keypadFaultyBtn);
@@ -102,9 +107,9 @@ public class Gui implements KeyListener {
 		group = new ButtonGroup();
 		JRadioButton monitorOkBtn = new JRadioButton("working");
 		monitorOkBtn.setSelected(true);
-		monitorOkBtn.addActionListener(e-> monitor.setMonitorStatus(true));
+		monitorOkBtn.addActionListener(e -> monitor.setMonitorStatus(true));
 		JRadioButton monitorFaultyBtn = new JRadioButton("faulty");
-		monitorFaultyBtn.addActionListener(e-> monitor.setMonitorStatus(false));
+		monitorFaultyBtn.addActionListener(e -> monitor.setMonitorStatus(false));
 		group.add(monitorOkBtn);
 		pane.add(monitorOkBtn);
 		group.add(monitorFaultyBtn);
@@ -114,9 +119,9 @@ public class Gui implements KeyListener {
 		group = new ButtonGroup();
 		JRadioButton disbuserOkBtn = new JRadioButton("working");
 		disbuserOkBtn.setSelected(true);
-		disbuserOkBtn.addActionListener(e-> disburser.setCashDisburserStatus(true));
+		disbuserOkBtn.addActionListener(e -> disburser.setCashDisburserStatus(true));
 		JRadioButton disburserFaultyBtn = new JRadioButton("faulty");
-		disburserFaultyBtn.addActionListener(e-> disburser.setCashDisburserStatus(false));
+		disburserFaultyBtn.addActionListener(e -> disburser.setCashDisburserStatus(false));
 		group.add(disbuserOkBtn);
 		pane.add(disbuserOkBtn);
 		group.add(disburserFaultyBtn);
@@ -154,7 +159,7 @@ public class Gui implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		//System.out.println(e.getKeyCode());
+		// System.out.println(e.getKeyCode());
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_0:
 			keypad.dataButtonPressed(0);
@@ -224,7 +229,7 @@ public class Gui implements KeyListener {
 		}
 
 	}
-	
+
 	void setMonitor(Monitor m) {
 		this.monitor = m;
 	}
