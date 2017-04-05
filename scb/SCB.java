@@ -21,7 +21,7 @@ import sm.SysClock;
 //ATM
 
 public class SCB {
-	
+
 	public static final int START_AMOUNT_OF_CASH_IN_ATM = 10000; // dollar
 
 	private static PN currentState;
@@ -39,8 +39,11 @@ public class SCB {
 	public static boolean isBillsDisbursed;
 	public static boolean sysShutDown;
 
-	// Constructor
-	public static void initSCB() {
+	/**
+	 * Initializes the system control block. This function has to be called
+	 * before the ATM starts.
+	 */
+	private static void initSCB() {
 		currentState = PN.WELCOME;
 		serviceCompleted = false;
 		serviceCanceled = false;
@@ -53,24 +56,44 @@ public class SCB {
 		resetPinTrialTimes();
 	}
 
+	/**
+	 * Decreases the number of remaining pin trials of the user by one.
+	 */
 	public static void decreasePinTrialTimes() {
 		pinTrialTimes--;
 	}
 
+	/**
+	 * Resets the number of pin trials to the initial value (3)
+	 */
 	public static void resetPinTrialTimes() {
 		pinTrialTimes = 3;
 	}
 
+	/**
+	 * Returns the number of remaining pin trials of the user.
+	 * 
+	 * @return The number of remaining pin trials
+	 */
 	public static int getPinTrialTimes() {
 		return pinTrialTimes;
 	}
 
+	/**
+	 * Sets the current state of the system to the given one.
+	 * 
+	 * @param currentState
+	 *            The new system state.
+	 */
 	public static void setCurrentState(PN currentState) {
 		SCB.currentState = currentState;
 	}
 
 	public static void main(String[] args) {
 
+		/*
+		 * Prepare system
+		 */
 		initSCB();
 
 		CardScanner cardScanner = new CardScanner();
@@ -88,7 +111,10 @@ public class SCB {
 		systemClock.start();
 
 		int currentAccountNumber = AccountDatabase.INVALID_ACCOUNT_NUMBER;
-
+		
+		/*
+		 * Start system loop (dispatch)
+		 */
 		while (!sysShutDown) {
 			// systemDispatch
 			switch (SCB.currentState) {
@@ -99,8 +125,7 @@ public class SCB {
 				CheckPinPM.checkPIN(currentAccountNumber, monitor, keypad, db, systemClock);
 				break;
 			case INPUT_WITHDRAW_AMOUNT:
-				InputWithdrawAmountPM.inputWithdrawAmount(currentAccountNumber, monitor, keypad, db,
-						systemClock);
+				InputWithdrawAmountPM.inputWithdrawAmount(currentAccountNumber, monitor, keypad, db, systemClock);
 				break;
 			case VERIFY_BALANCE:
 				VerifyBalancePM.verifyBalance(currentAccountNumber, monitor, keypad, db, systemClock);
