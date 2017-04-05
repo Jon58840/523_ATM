@@ -81,7 +81,7 @@ public class SCB {
 		CashDisburser cashDisburser = new CashDisburser();
 		CashBank cashBank = new CashBank(START_AMOUNT_OF_CASH_IN_ATM, cashDisburser);
 
-		Gui gui = new Gui(cardScanner, keypad);
+		Gui gui = new Gui(cardScanner, keypad, cashDisburser);
 		Monitor monitor = new Monitor(gui);
 
 		SysClock systemClock = new SysClock();

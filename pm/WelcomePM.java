@@ -13,7 +13,7 @@ public class WelcomePM {
 
 		boolean cardInserted = false;
 		while (!cardInserted) {
-			if (monitor.isWorking() && cs.getCardScannerStatus()) {
+			if (monitor.isWorking() && cs.isWorking()) {
 
 				monitor.showMessages("Welcome!", "Please insert your card.");
 
@@ -25,7 +25,7 @@ public class WelcomePM {
 
 				if (!monitor.isWorking()) {
 					System.out.println("Monitor fault.");
-				} else if (!cs.getCardScannerStatus()) {
+				} else if (!cs.isWorking()) {
 					System.out.println("Card scanner fault.");
 				}
 

@@ -21,8 +21,12 @@ public class CashDisburser {
 		return cashDisburserStatus;
 	}
 	
+	public void setCashDisburserStatus(boolean isWorking) {
+		cashDisburserStatus = isWorking;
+	}
+	
 	public void disburse() {
-		System.out.println("DISBURSED " + currentDisburseAmount + " dollar.");
+		System.out.println("CashDisburser:\tDISBURSED " + currentDisburseAmount + " dollar.");
 		currentDisburseAmount = 0;
 	}
 	

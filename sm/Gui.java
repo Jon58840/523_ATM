@@ -4,13 +4,19 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.ButtonGroup;
+import javax.swing.InputVerifier;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-import simulatedInput.FakeCards;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 public class Gui implements KeyListener {
 
@@ -19,14 +25,22 @@ public class Gui implements KeyListener {
 	private JFrame frame;
 	private JLabel msgLabel;
 
+	private JTextField cardNumTxt;
+
 	private final CardScannerInterface cardScanner;
 	private final Keypad keypad;
+	
+	private Monitor monitor;
+	private CashDisburser disburser;
 
-	public Gui(CardScannerInterface csi, Keypad keypadSimulationInterface) {
+	public Gui(CardScannerInterface csi, Keypad keypadSimulationInterface, CashDisburser disburser) {
 		this.cardScanner = csi;
 		this.keypad = keypadSimulationInterface;
-		createAndShowGUI(); // can also be made public and called from
-							// outside...
+		this.disburser = disburser;
+		createAndShowGUI();
+		createDeviceSimulatorGUI();
+		frame.toFront();
+		frame.requestFocus();
 	}
 
 	private void createAndShowGUI() {
@@ -50,6 +64,78 @@ public class Gui implements KeyListener {
 		frame.setVisible(true);
 	}
 
+	private void createDeviceSimulatorGUI() {
+
+		JFrame deviceControl = new JFrame("Devices");
+
+		deviceControl.addKeyListener(this);
+
+		Container pane = deviceControl.getContentPane();
+
+		pane.setLayout(new GridLayout(5, 3));
+
+		pane.add(new JLabel("Keypad:"));
+		ButtonGroup group = new ButtonGroup();
+		JRadioButton keypadOkBtn = new JRadioButton("working");
+		keypadOkBtn.setSelected(true);
+		keypadOkBtn.addActionListener(e-> keypad.setKeypadStatus(true));
+		JRadioButton keypadFaultyBtn = new JRadioButton("faulty");
+		keypadFaultyBtn.addActionListener(e-> keypad.setKeypadStatus(false));
+		group.add(keypadOkBtn);
+		pane.add(keypadOkBtn);
+		group.add(keypadFaultyBtn);
+		pane.add(keypadFaultyBtn);
+
+		pane.add(new JLabel("CardScanner:"));
+		group = new ButtonGroup();
+		JRadioButton scannerOkBtn = new JRadioButton("working");
+		scannerOkBtn.setSelected(true);
+		scannerOkBtn.addActionListener(e -> cardScanner.setCardReaderStatus(true));
+		JRadioButton scannerFaultyBtn = new JRadioButton("faulty");
+		scannerFaultyBtn.addActionListener(e -> cardScanner.setCardReaderStatus(false));
+		group.add(scannerOkBtn);
+		pane.add(scannerOkBtn);
+		group.add(scannerFaultyBtn);
+		pane.add(scannerFaultyBtn);
+
+		pane.add(new JLabel("Monitor:"));
+		group = new ButtonGroup();
+		JRadioButton monitorOkBtn = new JRadioButton("working");
+		monitorOkBtn.setSelected(true);
+		monitorOkBtn.addActionListener(e-> monitor.setMonitorStatus(true));
+		JRadioButton monitorFaultyBtn = new JRadioButton("faulty");
+		monitorFaultyBtn.addActionListener(e-> monitor.setMonitorStatus(false));
+		group.add(monitorOkBtn);
+		pane.add(monitorOkBtn);
+		group.add(monitorFaultyBtn);
+		pane.add(monitorFaultyBtn);
+
+		pane.add(new JLabel("Disburser:"));
+		group = new ButtonGroup();
+		JRadioButton disbuserOkBtn = new JRadioButton("working");
+		disbuserOkBtn.setSelected(true);
+		disbuserOkBtn.addActionListener(e-> disburser.setCashDisburserStatus(true));
+		JRadioButton disburserFaultyBtn = new JRadioButton("faulty");
+		disburserFaultyBtn.addActionListener(e-> disburser.setCashDisburserStatus(false));
+		group.add(disbuserOkBtn);
+		pane.add(disbuserOkBtn);
+		group.add(disburserFaultyBtn);
+		pane.add(disburserFaultyBtn);
+
+		pane.add(new JLabel("Card number:"));
+		cardNumTxt = new JTextField("1234");
+		cardNumTxt.setInputVerifier(new CardNumberInputVerifier());
+		pane.add(cardNumTxt);
+		JButton insertCardBtn = new JButton("Insert");
+		insertCardBtn.addActionListener(e -> insertCard());
+		pane.add(insertCardBtn);
+
+		deviceControl.pack();
+		deviceControl.setLocation(frame.getX() + frame.getWidth(),
+				frame.getY() + frame.getHeight() / 2 - deviceControl.getHeight() / 2);
+		deviceControl.setVisible(true);
+	}
+
 	public void setMonitorMessage(String... msgs) {
 		StringBuilder sb = new StringBuilder("<html>");
 		for (String line : msgs) {
@@ -68,7 +154,7 @@ public class Gui implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		System.out.println(e.getKeyCode());
+		//System.out.println(e.getKeyCode());
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_0:
 			keypad.dataButtonPressed(0);
@@ -101,9 +187,7 @@ public class Gui implements KeyListener {
 			keypad.dataButtonPressed(9);
 			break;
 		case KeyEvent.VK_INSERT:
-			int num = FakeCards.getNextFakeCardNumber();
-			cardScanner.inputCard(num);
-			System.out.println("CARD INSERTED (" + num + ")");
+			insertCard();
 			break;
 		case KeyEvent.VK_ENTER:
 			keypad.setEnterButtonPressed(true);
@@ -117,6 +201,45 @@ public class Gui implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// Auto-generated method stub
+	}
+
+	private void insertCard() {
+		int accNum = AccountDatabase.INVALID_ACCOUNT_NUMBER;
+		try {
+			accNum = Integer.parseInt(cardNumTxt.getText());
+		} catch (NumberFormatException e) {
+			// do nothing
+		}
+		if (accNum != AccountDatabase.INVALID_ACCOUNT_NUMBER && Account.isValidAccountNumber(accNum)) {
+			if (!cardScanner.isCardInsertEngine()) {
+				cardScanner.inputCard(accNum);
+			} else {
+				JOptionPane.showMessageDialog(frame,
+						"Card could not be inserted as there is already a card in the scanner.", "Card error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		} else {
+			JOptionPane.showMessageDialog(frame, cardNumTxt.getText() + " is not a legal account number. Change!",
+					"Input error", JOptionPane.ERROR_MESSAGE);
+		}
+
+	}
+	
+	void setMonitor(Monitor m) {
+		this.monitor = m;
+	}
+
+	public class CardNumberInputVerifier extends InputVerifier {
+		@Override
+		public boolean verify(JComponent input) {
+			String text = ((JTextField) input).getText();
+			try {
+				int value = Integer.parseInt(text);
+				return Account.isValidAccountNumber(value);
+			} catch (NumberFormatException e) {
+				return false;
+			}
+		}
 	}
 
 }

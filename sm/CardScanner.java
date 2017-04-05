@@ -19,8 +19,8 @@ public class CardScanner implements CardScannerInterface {
 	// True = Normal/working
 	// False = Faulty
 	private boolean cardReadStatus;
-	private boolean cardInsertStatus;
-	private boolean cardEjectStatus;
+	final private boolean cardInsertStatus; // defined but never used in specification
+	final private boolean cardEjectStatus; // defined but never used in specification
 
 	/**
 	 * Constructor to create a new card scanner object to simulate the actions
@@ -46,6 +46,7 @@ public class CardScanner implements CardScannerInterface {
 		if (cardNumber >= 0 && cardNumber <= 1000000) {
 			cardInput = cardNumber;
 			cardEngine = true;
+			System.out.println("CardScanner:\tINSERTED CARD (Num=" + cardInput + ")");
 		} else {
 			throw new IllegalArgumentException(cardNumber + " is no valid card");
 		}
@@ -58,6 +59,7 @@ public class CardScanner implements CardScannerInterface {
 	 */
 	public void ejectCard() {
 		cardEngine = false;
+		System.out.println("CardScanner:\tEJECTED CARD (Num=" + cardInput + ")");
 	}
 
 	/**
@@ -75,6 +77,7 @@ public class CardScanner implements CardScannerInterface {
 	 * 
 	 * @return true if card is inserted, false otherwise.
 	 */
+	@Override
 	public boolean isCardInsertEngine() {
 		return cardEngine;
 	}
@@ -91,7 +94,12 @@ public class CardScanner implements CardScannerInterface {
 		return cardEjectStatus;
 	}
 
-	public boolean getCardScannerStatus() {
+	@Override
+	public void setCardReaderStatus(boolean cardReaderIsWorking) {
+		this.cardReadStatus = cardReaderIsWorking;
+	}
+	
+	public boolean isWorking() {
 		return cardReadStatus && cardInsertStatus && cardEjectStatus;
 	}
 

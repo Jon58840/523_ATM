@@ -1,0 +1,7 @@
+Key bindings (requires focus on ATM frame):
+    [0-9] insert numbers from 0 to 9
+    [Esc] cancel button
+    [Enter] enter button
+    [Insert] insert fake card
+
+The state of the devices can be set in the "Devices" frame.

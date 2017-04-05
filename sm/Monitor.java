@@ -28,6 +28,7 @@ public class Monitor {
 	public Monitor(Gui gui) {
 		this.monitorStatus = true;
 		this.gui = gui;
+		gui.setMonitor(this);
 	}
 
 	/**
