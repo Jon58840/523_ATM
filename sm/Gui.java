@@ -1,9 +1,11 @@
 package sm;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -15,10 +17,14 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class Gui implements KeyListener {
+import scb.PN;
+import scb.SCB;
+
+public class Gui implements KeyListener, DisburserGuiInterface {
 
 	public static final int FONT_SIZE = 24;
 
@@ -26,6 +32,9 @@ public class Gui implements KeyListener {
 	private JLabel msgLabel;
 
 	private JTextField cardNumTxt;
+	private CardReaderPanel cardReaderPanel;
+	private DisburserPanel disburserPanel;
+	private JPanel keyPanel;
 
 	private final CardScannerInterface cardScanner;
 	private final Keypad keypad;
@@ -61,7 +70,40 @@ public class Gui implements KeyListener {
 		msgLabel.setHorizontalAlignment(JLabel.CENTER);
 		msgLabel.setVerticalAlignment(JLabel.CENTER);
 		pane.add(msgLabel, BorderLayout.CENTER);
+		
+		keyPanel = new JPanel();
+		keyPanel.setLayout(new GridLayout(4, 3));
+		
+		for (int i = 7; i > 0; i -= 3) {
+			for (int j = 0; j < 3; j++) {
+				final int num = i + j;
+				JButton btn = new JButton(Integer.toString(num));
+				btn.addActionListener(e -> keypad.dataButtonPressed(num));
+				keyPanel.add(btn);
+			}
+		}
 
+		JButton btn = new JButton("cancel");
+		btn.addActionListener(e -> keypad.setCancelButtonPressed(true));
+		keyPanel.add(btn);
+		
+		btn = new JButton(Integer.toString(0));
+		btn.addActionListener(e -> keypad.dataButtonPressed(0));
+		keyPanel.add(btn);
+		
+		btn = new JButton("enter");
+		btn.addActionListener(e -> keypad.setEnterButtonPressed(true));
+		keyPanel.add(btn);
+	
+		frame.add(keyPanel, BorderLayout.EAST);
+		
+		cardReaderPanel = new CardReaderPanel(this.cardScanner);
+		disburserPanel = new DisburserPanel();
+		JPanel c = new JPanel(new BorderLayout());
+		c.add(disburserPanel, BorderLayout.CENTER);
+		c.add(cardReaderPanel, BorderLayout.EAST);
+		frame.add(c, BorderLayout.SOUTH);
+		
 		frame.pack();
 		frame.setVisible(true);
 	}
@@ -150,6 +192,18 @@ public class Gui implements KeyListener {
 		}
 		sb.append("</html>");
 		this.msgLabel.setText(sb.toString());
+		
+		final PN state = SCB.getCurrentState();
+		if(state == PN.WELCOME || state == PN.SYSTEM_FAILURE) {
+			// "hack" to ensure cardReaderPanel is repainted 
+			// (without giving it a reference to the gui)
+			// can only be change when message is updated
+			cardReaderPanel.repaint();
+		}
+		
+		if(state == PN.WELCOME) {
+			disburserPanel.reset();
+		}
 	}
 
 	@Override
@@ -218,6 +272,8 @@ public class Gui implements KeyListener {
 		if (accNum != AccountDatabase.INVALID_ACCOUNT_NUMBER && Account.isValidAccountNumber(accNum)) {
 			if (!cardScanner.isCardInsertEngine()) {
 				cardScanner.inputCard(accNum);
+				cardReaderPanel.repaint();
+				disburserPanel.reset();
 			} else {
 				JOptionPane.showMessageDialog(frame,
 						"Card could not be inserted as there is already a card in the scanner.", "Card error",
@@ -233,7 +289,13 @@ public class Gui implements KeyListener {
 	void setMonitor(Monitor m) {
 		this.monitor = m;
 	}
-
+	
+	@Override
+	public void showDisburse(int amountOfCash) {
+		disburserPanel.disburse(amountOfCash);
+		disburserPanel.repaint();
+	}
+	
 	public class CardNumberInputVerifier extends InputVerifier {
 		@Override
 		public boolean verify(JComponent input) {
@@ -246,5 +308,80 @@ public class Gui implements KeyListener {
 			}
 		}
 	}
+	
+	public class CardReaderPanel extends JPanel {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 6544536109497682477L;
+		
+		private final CardScannerInterface csi;
+		
+		private final static int offset = 10;
+		
+		public CardReaderPanel(CardScannerInterface csi) {
+			this.csi = csi;
+			setPreferredSize(new Dimension(230,100));
+		}
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            
+            if(csi.isCardInsertEngine()) {
+            	g.fillRect(offset, offset, getWidth() - 2 * offset, getHeight() - 2 * offset);
+            	final String msg = "Card inserted"; 
+            	g.setColor(Color.WHITE);
+            	g.drawChars(msg.toCharArray(), 0, msg.length(), 7 * offset, getHeight() / 2 + 6);
+            } else {
+            	g.drawRect(offset, offset, getWidth() - 2 * offset, getHeight() - 2 * offset);
+            	final String msg = "CardScanner empty";
+            	g.setColor(Color.BLACK);
+            	g.drawChars(msg.toCharArray(), 0, msg.length(), 5 * offset, getHeight() / 2 + 6);
+            }
+
+        }
+		
+	}
+	
+	public class DisburserPanel extends JPanel {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 6544536109497682477L;
+		
+		private int currentlyDisbursedCash;
+		
+		private final static int offset = 10;
+		
+		public DisburserPanel() {
+			setPreferredSize(new Dimension(100, 100));
+			currentlyDisbursedCash = 0;
+		}
+		
+		public void disburse(int cashAmount) {
+			currentlyDisbursedCash = cashAmount;
+			repaint();
+		}
+
+		public void reset() {
+			currentlyDisbursedCash = 0;
+			repaint();
+		}
+		
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            
+            g.drawRect(offset, offset, getWidth() - 2 * offset, getHeight() - 2 * offset);
+            
+            if(currentlyDisbursedCash > 0) {
+            	final String msg = "Disbursed " + currentlyDisbursedCash + " dollar."; 
+            	g.drawChars(msg.toCharArray(), 0, msg.length(), 7 * offset, getHeight() / 2 + 6);
+            }
+
+        }
+	}
 }

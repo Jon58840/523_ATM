@@ -16,10 +16,25 @@ public class CashDisburser {
 	private int currentDisburseAmount;
 
 	/**
+	 * The interface to notify the gui about the disbursing.
+	 */
+	private DisburserGuiInterface gui;
+
+	/**
 	 * Constructor of a CashDisburser device object.
 	 */
 	public CashDisburser() {
 		cashDisburserStatus = true;
+	}
+
+	/**
+	 * Sets the gui that should be notified about the disbursing.
+	 * 
+	 * @param gui
+	 *            The gui to be notified
+	 */
+	public void setGuiInterface(DisburserGuiInterface gui) {
+		this.gui = gui;
 	}
 
 	/**
@@ -46,6 +61,9 @@ public class CashDisburser {
 	 */
 	public void disburse() {
 		System.out.println("CashDisburser:\tDISBURSED " + currentDisburseAmount + " dollar.");
+		if (gui != null) {
+			gui.showDisburse(currentDisburseAmount);
+		}
 		currentDisburseAmount = 0;
 	}
 

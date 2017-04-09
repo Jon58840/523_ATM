@@ -89,6 +89,15 @@ public class SCB {
 		SCB.currentState = currentState;
 	}
 
+	/**
+	 * Returns the current state of the system.
+	 * 
+	 * @return The state of the ATM system in which it is operating.
+	 */
+	public static PN getCurrentState() {
+		return SCB.currentState;
+	}
+
 	public static void main(String[] args) {
 
 		/*
@@ -106,12 +115,13 @@ public class SCB {
 
 		Gui gui = new Gui(cardScanner, keypad, cashDisburser);
 		Monitor monitor = new Monitor(gui);
+		cashDisburser.setGuiInterface(gui);
 
 		SysClock systemClock = new SysClock();
 		systemClock.start();
 
 		int currentAccountNumber = AccountDatabase.INVALID_ACCOUNT_NUMBER;
-		
+
 		/*
 		 * Start system loop (dispatch)
 		 */
